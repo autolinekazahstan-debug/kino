@@ -93,7 +93,7 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
       </section>
       <aside class="panel">
         <div class="section-head"><h3>Каталог фильмов</h3><span class="tag">351 ФИЛЬМ</span></div>
-        <input id="filmSearch" type="search" placeholder="Поиск фильма..." style="width:100%;margin:0 0 10px;padding:11px;border-radius:10px;border:1px solid #ffffff2b;background:#0d0a18;color:#fff"><div class="list" id="list"></div>
+        <input id="filmSearch" type="search" placeholder="Поиск фильма..." style="width:100%;margin:0 0 10px;padding:11px;border-radius:10px;border:1px solid #ffffff2b;background:#0d0a18;color:#fff"><div class="list" id="list"></div><div class="section-head" style="margin-top:16px"><h3>Категории фильмов</h3><span class="tag" id="filmCategoryCount">0 категорий</span></div><div class="iptv-categories" id="filmCategories"></div>
       </aside>
     </div>
   </section>
@@ -234,13 +234,39 @@ function choose(i,autoplay=false){
  setStatus("выбран фильм — "+f.title);
  if(autoplay)video.play().then(()=>setStatus("воспроизведение")).catch(()=>setStatus("нажми ▶ или проверь доступность потока"));
 }
-films.forEach((f,i)=>{
- const b=document.createElement("button");b.className="film";
- b.innerHTML='<span class="num">'+String(i+1).padStart(2,"0")+'</span><span><strong></strong><small></small></span>';
- b.querySelector("strong").textContent=f.title;b.querySelector("small").textContent=f.group;
- b.addEventListener("click",()=>choose(i,true));list.appendChild(b);
-});
-document.getElementById("filmSearch").addEventListener("input",e=>{const q=e.target.value.trim().toLocaleLowerCase("ru");[...list.children].forEach((el,i)=>{const f=films[i];el.classList.toggle("hidden",!(`${f.title} ${f.group}`.toLocaleLowerCase("ru").includes(q)));});});
+const filmCategories=document.getElementById("filmCategories");
+const filmCategoryCount=document.getElementById("filmCategoryCount");
+let activeFilmGroup="Все фильмы";
+function renderFilms(){
+ const groups=new Map();
+ films.forEach(f=>{const name=f.group||"Без категории";groups.set(name,(groups.get(name)||0)+1);});
+ if(activeFilmGroup!=="Все фильмы"&&!groups.has(activeFilmGroup))activeFilmGroup="Все фильмы";
+ filmCategories.innerHTML="";
+ const addFilmCategory=(name,count)=>{
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="iptv-category"+(activeFilmGroup===name?" active":"");
+  button.append(document.createTextNode(name));
+  const amount=document.createElement("small");amount.textContent=String(count);button.appendChild(amount);
+  button.addEventListener("click",()=>{activeFilmGroup=name;renderFilms();});
+  filmCategories.appendChild(button);
+ };
+ addFilmCategory("Все фильмы",films.length);
+ groups.forEach((count,name)=>addFilmCategory(name,count));
+ filmCategoryCount.textContent=groups.size+" категорий";
+ const query=document.getElementById("filmSearch").value.trim().toLocaleLowerCase("ru");
+ const visible=films.map((f,i)=>({f,i})).filter(({f})=>(activeFilmGroup==="Все фильмы"||(f.group||"Без категории")===activeFilmGroup)&&(`${f.title} ${f.group}`.toLocaleLowerCase("ru").includes(query)));
+ list.innerHTML="";
+ visible.forEach(({f,i})=>{
+  const button=document.createElement("button");button.className="film";
+  button.innerHTML='<span class="num">'+String(i+1).padStart(2,"0")+'</span><span><strong></strong><small></small></span>';
+  button.querySelector("strong").textContent=f.title;
+  button.querySelector("small").textContent=f.group||"Без категории";
+  button.addEventListener("click",()=>choose(i,true));list.appendChild(button);
+ });
+}
+renderFilms();
+document.getElementById("filmSearch").addEventListener("input",renderFilms);
 play.addEventListener("click",()=>{if(selected>=0)video.play().then(()=>setStatus("воспроизведение")).catch(()=>setStatus("браузер не смог запустить поток"));});
 stop.addEventListener("click",()=>{video.pause();video.removeAttribute("src");video.load();setStatus("остановлено");});
 video.addEventListener("playing",()=>setStatus("воспроизведение"));
