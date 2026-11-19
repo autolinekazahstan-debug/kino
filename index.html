@@ -40,7 +40,7 @@ button{font:inherit}
 .num{width:34px;height:40px;border-radius:9px;background:#392b57;display:grid;place-items:center;color:var(--gold);font-weight:800;flex:none}
 .film strong{display:block;font-size:13px}.film small{display:block;color:var(--muted);margin-top:4px;font-size:11px}
 .status{margin-top:11px;padding:10px 12px;background:#0d0a18;border-radius:10px;color:var(--muted);font-size:12px}.status b{color:var(--gold)}
-.hidden{display:none!important}
+section.page{display:none}#homePage{display:block}section.page:target{display:block}body:has(section.page:target) #homePage:not(:target){display:none}.hidden{display:none!important}
 .placeholder{padding:22px 17px;text-align:center}
 .placeholder .bigico{font-size:39px}
 .placeholder h3{margin:8px 0;color:var(--gold)}
@@ -63,21 +63,21 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
   </section>
 
   <nav aria-label="Главные разделы">
-    <button class="navbtn active" data-page="home"><span class="ico">⌂</span>Главная</button>
-    <button class="navbtn" data-page="films"><span class="ico">🎬</span>Фильмы</button>
-    <button class="navbtn" data-page="iptv"><span class="ico">📺</span>IPTV</button>
-    <button class="navbtn" data-page="music"><span class="ico">🎵</span>Музыка</button>
-    <button class="navbtn" data-page="clips"><span class="ico">🎞️</span>Клипы</button>
-    <button class="navbtn" data-page="ai"><span class="ico">✨</span>Выбор ИИ</button>
+    <a class="navbtn active" href="#homePage"><span class="ico">⌂</span>Главная</a>
+    <a class="navbtn" href="#filmsPage"><span class="ico">🎬</span>Фильмы</a>
+    <a class="navbtn" href="#iptvPage"><span class="ico">📺</span>IPTV</a>
+    <a class="navbtn" href="#musicPage"><span class="ico">🎵</span>Музыка</a>
+    <a class="navbtn" href="#clipsPage"><span class="ico">🎞️</span>Клипы</a>
+    <a class="navbtn" href="#aiPage"><span class="ico">✨</span>Выбор ИИ</a>
   </nav>
 
-  <section id="homePage" class="panel">
+  <section id="homePage" class="panel page">
     <div class="section-head"><h3>Добро пожаловать!</h3><span class="tag">351 ФИЛЬМ В КАТАЛОГЕ</span></div>
     <p class="hint">В разделе «Фильмы» собраны все 351 позиция из твоего BluRay-плейлиста. Выбирай фильм и запускай его во встроенном плеере. IPTV-плейлист можно обновлять по ссылке или загрузить свой файл.</p>
     <div class="ai-card"><h3>✨ ВЫБОР ИИ</h3><p>В будущем помощник сможет подбирать фильм или музыку под твоё настроение. Пока это задумка следующего этапа.</p></div>
   </section>
 
-  <section id="filmsPage" class="hidden">
+  <section id="filmsPage" class="page">
     <div class="section-head"><h3>Фильмы</h3><span class="tag">5 В КАТАЛОГЕ</span></div>
     <div class="layout">
       <section class="panel">
@@ -97,7 +97,7 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
     </div>
   </section>
 
-  <section id="iptvPage" class="panel hidden">
+  <section id="iptvPage" class="panel page">
     <div class="section-head"><h3>📺 IPTV — онлайн-плейлист</h3><span class="tag">ПО ССЫЛКЕ</span></div>
     <p class="hint">Вставь постоянную ссылку на M3U/M3U8-плейлист. При нажатии «Обновить» приложение заново загрузит актуальный список каналов.</p>
     <div class="actions" style="margin:12px 0">
@@ -119,17 +119,17 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
       </aside>
     </div>
   </section>
-  <section id="musicPage" class="panel hidden placeholder">
+  <section id="musicPage" class="panel placeholder page">
     <div class="bigico">🎵</div><h3>Музыка</h3>
     <p>Здесь разместим музыкальную библиотеку, исполнителей, альбомы и аудиоплеер.</p>
     <span class="soon">Раздел подготовлен · подключение впереди</span>
   </section>
-  <section id="clipsPage" class="panel hidden placeholder">
+  <section id="clipsPage" class="panel placeholder page">
     <div class="bigico">🎞️</div><h3>Клипы</h3>
     <p>Отдельная коллекция музыкальных клипов и видеороликов с удобным просмотром.</p>
     <span class="soon">Раздел подготовлен · подключение впереди</span>
   </section>
-  <section id="aiPage" class="panel hidden placeholder">
+  <section id="aiPage" class="panel placeholder page">
     <div class="bigico">✨</div><h3>ВЫБОР ИИ</h3>
     <p>Будущий умный помощник «Моей медиатеки»: поможет выбрать, что посмотреть или послушать, по жанру и настроению.</p>
     <span class="soon">Идея следующего этапа</span>
