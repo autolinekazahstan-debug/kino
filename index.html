@@ -152,11 +152,11 @@ let iptvItems=[];
 try { iptvUrl.value=localStorage.getItem("myMediaIptvUrl")||"https://raw.githubusercontent.com/autolinekazahstan-debug/iptvkz/refs/heads/main/playlist.m3u"; } catch(e) { iptvUrl.value="https://raw.githubusercontent.com/autolinekazahstan-debug/iptvkz/refs/heads/main/playlist.m3u"; }
 function iptvMsg(message){iptvStatus.innerHTML="Статус: <b></b>";iptvStatus.querySelector("b").textContent=message;}
 function parseM3U(source){
- const lines=source.replace(/^\\uFEFF/,"").split(/\\r?\\n/); const out=[]; let title="Канал", group="";
+ const lines=source.replace(/^\uFEFF/,"").split(/\r?\n/); const out=[]; let title="Канал", group="";
  for(const raw of lines){const line=raw.trim();if(!line)continue;
   if(line.startsWith("#EXTINF")){const comma=line.lastIndexOf(",");title=comma>=0?line.slice(comma+1).trim():"Канал";
    const g=line.match(/group-title="([^"]*)"/i);group=g?g[1]:"";} else if(line.startsWith("#EXTGRP:")){group=line.slice(8).trim();}
-  else if(!line.startsWith("#") && /^https?:\\/\\//i.test(line)){out.push({title,group,url:line});title="Канал";group="";}
+  else if(!line.startsWith("#") && /^https?:\/\//i.test(line)){out.push({title,group,url:line});title="Канал";group="";}
  }
  return out;
 }
@@ -173,7 +173,7 @@ function renderIptv(){
 }
 async function refreshIptv(){
  const url=iptvUrl.value.trim();if(!url){iptvMsg("вставь ссылку на M3U/M3U8");return;}
- if(!/^https?:\\/\\//i.test(url)){iptvMsg("нужна ссылка, начинающаяся с http:// или https://");return;}
+ if(!/^https?:\/\//i.test(url)){iptvMsg("нужна ссылка, начинающаяся с http:// или https://");return;}
  try{iptvMsg("загружаю плейлист…");try{localStorage.setItem("myMediaIptvUrl",url);}catch(e){}
   const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw new Error("HTTP "+response.status);
   const body=await response.text();iptvItems=parseM3U(body);renderIptv();
