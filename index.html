@@ -37,6 +37,7 @@ button{font:inherit}
 .list{display:grid;gap:8px;max-height:70vh;overflow:auto}
 .film{width:100%;text-align:left;background:#211a34;border:1px solid #ffffff12;border-radius:13px;padding:11px;color:#f7f3ff;display:flex;gap:11px;align-items:center}
 .film.active{border-color:var(--gold);background:#302641}
+ .iptv-categories{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 12px}.iptv-category{border:1px solid #ffffff20;border-radius:20px;padding:8px 11px;background:#211a34;color:#eee7ff;font-size:12px;font-weight:700}.iptv-category.active{border-color:var(--gold);background:#49345f;color:#fff}.iptv-category small{color:var(--gold);margin-left:5px}
 .num{width:34px;height:40px;border-radius:9px;background:#392b57;display:grid;place-items:center;color:var(--gold);font-weight:800;flex:none}
 .film strong{display:block;font-size:13px}.film small{display:block;color:var(--muted);margin-top:4px;font-size:11px}
 .status{margin-top:11px;padding:10px 12px;background:#0d0a18;border-radius:10px;color:var(--muted);font-size:12px}.status b{color:var(--gold)}
@@ -115,6 +116,7 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
       </section>
       <aside class="panel">
         <div class="section-head"><h3>Каналы</h3><span class="tag" id="iptvCount">0</span></div>
+        <div class="iptv-categories" id="iptvCategories" aria-label="Категории каналов"></div>
         <div class="list" id="iptvChannels"><p class="hint">После загрузки здесь появятся каналы.</p></div>
       </aside>
     </div>
@@ -147,8 +149,8 @@ const iptvUrl=document.getElementById("iptvUrl"), loadIptv=document.getElementBy
 iptvUrl.value="https://raw.githubusercontent.com/autolinekazahstan-debug/iptvkz/refs/heads/main/playlist.m3u";
 const iptvStatus=document.getElementById("iptvStatus"), iptvChannels=document.getElementById("iptvChannels");
 const iptvCount=document.getElementById("iptvCount"), iptvVideo=document.getElementById("iptvVideo");
-const iptvNow=document.getElementById("iptvNow");
-let iptvItems=[];
+const iptvNow=document.getElementById("iptvNow"), iptvCategories=document.getElementById("iptvCategories");
+let iptvItems=[], activeIptvGroup="Все каналы";
 try { iptvUrl.value=localStorage.getItem("myMediaIptvUrl")||"https://raw.githubusercontent.com/autolinekazahstan-debug/iptvkz/refs/heads/main/playlist.m3u"; } catch(e) { iptvUrl.value="https://raw.githubusercontent.com/autolinekazahstan-debug/iptvkz/refs/heads/main/playlist.m3u"; }
 function iptvMsg(message){iptvStatus.innerHTML="Статус: <b></b>";iptvStatus.querySelector("b").textContent=message;}
 function parseM3U(source){
@@ -163,13 +165,29 @@ function parseM3U(source){
 function playIptv(item){iptvVideo.src=item.url;iptvNow.textContent=item.title;
  iptvVideo.play().then(()=>iptvMsg("воспроизведение: "+item.title)).catch(()=>iptvMsg("канал выбран — нажми Play; поток может быть недоступен в браузере"));}
 function renderIptv(){
- iptvChannels.innerHTML="";iptvCount.textContent=String(iptvItems.length);
+ const groups=new Map();
+ iptvItems.forEach(item=>{const name=item.group||"Без категории";groups.set(name,(groups.get(name)||0)+1);});
+ if(activeIptvGroup!=="Все каналы"&&!groups.has(activeIptvGroup))activeIptvGroup="Все каналы";
+ iptvCategories.innerHTML="";
+ const addCategory=(name,count)=>{
+  const b=document.createElement("button");b.type="button";b.className="iptv-category"+(activeIptvGroup===name?" active":"");
+  b.append(document.createTextNode(name));
+  const n=document.createElement("small");n.textContent=String(count);b.appendChild(n);
+  b.addEventListener("click",()=>{activeIptvGroup=name;renderIptv();});iptvCategories.appendChild(b);
+ };
+ addCategory("Все каналы",iptvItems.length);
+ groups.forEach((count,name)=>addCategory(name,count));
+ const visible=activeIptvGroup==="Все каналы"?iptvItems:iptvItems.filter(item=>(item.group||"Без категории")===activeIptvGroup);
+ iptvChannels.innerHTML="";iptvCount.textContent=visible.length+" / "+iptvItems.length;
  if(!iptvItems.length){iptvChannels.innerHTML='<p class="hint">В плейлисте пока нет распознанных каналов.</p>';return;}
- iptvItems.forEach((item,i)=>{const b=document.createElement("button");b.className="film";
+ if(!visible.length){iptvChannels.innerHTML='<p class="hint">В этой категории пока нет каналов.</p>';return;}
+ visible.forEach(item=>{
+  const i=iptvItems.indexOf(item),b=document.createElement("button");b.className="film";
   const n=document.createElement("span");n.className="num";n.textContent=String(i+1).padStart(2,"0");
   const wrap=document.createElement("span"),strong=document.createElement("strong"),small=document.createElement("small");
-  strong.textContent=item.title;small.textContent=item.group||"Телеканал";wrap.append(strong,small);b.append(n,wrap);
-  b.addEventListener("click",()=>playIptv(item));iptvChannels.appendChild(b);});
+  strong.textContent=item.title;small.textContent=item.group||"Без категории";wrap.append(strong,small);b.append(n,wrap);
+  b.addEventListener("click",()=>playIptv(item));iptvChannels.appendChild(b);
+ });
 }
 async function refreshIptv(){
  const url=iptvUrl.value.trim();if(!url){iptvMsg("вставь ссылку на M3U/M3U8");return;}
