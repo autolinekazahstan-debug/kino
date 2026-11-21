@@ -254,6 +254,7 @@ header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
     <a class="navbtn" href="#musicPage"><span class="ico">🎵</span>Музыка</a>
     <a class="navbtn" href="#clipsPage"><span class="ico">🎞️</span>Клипы</a>
     <a class="navbtn" href="#aiPage"><span class="ico">✨</span>Выбор ИИ</a>
+    <a class="navbtn" href="#healthPage"><span class="ico">🩺</span>Состояние</a>
   </nav>
 
   <section id="homePage" class="panel page">
@@ -342,6 +343,17 @@ header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
     <p>Будущий умный помощник «Моей медиатеки»: поможет выбрать, что посмотреть или послушать, по жанру и настроению.</p>
     <span class="soon">Идея следующего этапа</span>
   </section>
+  <section id="healthPage" class="page">
+    <div class="section-head"><h3>Состояние медиатеки</h3><span class="tag">АВТОПРОВЕРКА</span></div>
+    <section class="panel">
+      <p class="hint">Система регулярно проверяет адреса фильмов на сервере и сохраняет отчёт. «Доступна» означает, что сервер ответил; окончательное воспроизведение зависит также от формата и плеера.</p>
+      <div class="actions"><button class="action" id="reloadLinkReport">↻ Обновить отчёт</button><a class="action secondary" href="https://github.com/autolinekazahstan-debug/kino/actions/workflows/check-links.yml" target="_blank" rel="noopener">История проверок</a></div>
+      <div class="status" id="linkReportStatus">Статус: <b>загружаю последний отчёт…</b></div>
+      <div class="iptv-categories" id="linkReportSummary"></div>
+      <input id="linkReportSearch" type="search" placeholder="Найти фильм или ссылку" style="width:100%;padding:12px;border:1px solid #ffffff30;border-radius:10px;margin:8px 0">
+      <div class="list" id="linkReportRows" style="max-height:55vh"></div>
+    </section>
+  </section>
 </main>
 <footer>МОЯ МЕДИАТЕКА · персональная медиатека · каталог 351 фильм</footer>
 <script>
@@ -351,7 +363,7 @@ document.querySelector("#filmsPage .section-head .tag").textContent=films.length
 function showPage(hash, scroll=true){
  const id=(hash||"#homePage").slice(1);
  const target=document.getElementById(id);
- const pageIds=["homePage","filmsPage","iptvPage","musicPage","clipsPage","aiPage"];
+ const pageIds=["homePage","filmsPage","iptvPage","musicPage","clipsPage","aiPage","healthPage"];
  const active=target&&pageIds.includes(id)?id:"homePage";
  document.querySelectorAll("section.page").forEach(section=>{
   section.style.display=section.id===active?"block":"none";
@@ -541,6 +553,50 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
  render();
 })();
 
+
+/* Отчёт автоматической серверной проверки ссылок фильмов */
+(()=> {
+ const status=document.getElementById("linkReportStatus");
+ const summary=document.getElementById("linkReportSummary");
+ const rows=document.getElementById("linkReportRows");
+ const search=document.getElementById("linkReportSearch");
+ const button=document.getElementById("reloadLinkReport");
+ if(!status||!summary||!rows||!button)return;
+ let report=null;
+ const say=t=>{status.innerHTML="Статус: <b></b>";status.querySelector("b").textContent=t;};
+ function render(){
+  if(!report)return;
+  const counts=report.counts||{};
+  summary.innerHTML="";
+  [["Доступны",counts.available||0],["Недоступны",counts.unavailable||0],["Неясно",counts.unknown||0]].forEach(([label,n])=>{
+   const b=document.createElement("span");b.className="iptv-category";b.textContent=label+" · "+n;summary.appendChild(b);
+  });
+  const q=search.value.trim().toLocaleLowerCase("ru");
+  const items=(report.items||[]).filter(x=>(x.title+" "+x.url+" "+x.group).toLocaleLowerCase("ru").includes(q));
+  rows.innerHTML="";
+  items.forEach((item,index)=>{
+   const b=document.createElement("div");b.className="film";
+   const number=document.createElement("span");number.className="num";number.textContent=String(index+1).padStart(2,"0");
+   const wrap=document.createElement("span"),title=document.createElement("strong"),meta=document.createElement("small");
+   title.textContent=item.title;
+   const label=item.status==="available"?"Сервер ответил":item.status==="unavailable"?"Ошибка ссылки":"Нужна повторная проверка";
+   meta.textContent=(item.group||"Без категории")+" · "+label+(item.http_status?" · HTTP "+item.http_status:"");
+   wrap.append(title,meta);b.append(number,wrap);rows.appendChild(b);
+  });
+  if(!items.length){const p=document.createElement("p");p.className="hint";p.textContent="Совпадений нет.";rows.appendChild(p);}
+ }
+ async function load(){
+  button.disabled=true;say("загружаю последний отчёт…");
+  try{
+   const response=await fetch("./link-status.json?ts="+Date.now(),{cache:"no-store"});
+   if(!response.ok)throw new Error("HTTP "+response.status);
+   report=await response.json();render();
+   say("проверено "+(report.checked_at||"—")+" · фильмов: "+(report.total||0));
+  }catch(e){say("отчёт ещё не опубликован. Запусти проверку в GitHub Actions или дождись первого запуска.");}
+  finally{button.disabled=false;}
+ }
+ button.addEventListener("click",load);search.addEventListener("input",render);load();
+})(); 
 
 /* Заставка показывается при каждом открытии сайта по ссылке */
 (()=>{const intro=document.getElementById("cinemaIntro");if(!intro)return;
