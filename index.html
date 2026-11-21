@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090713">
+<meta name="theme-color" content="#080808">
 <title>МОЯ МЕДИАТЕКА</title>
 <style>
 :root{color-scheme:dark;--bg:#090713;--panel:#171229;--muted:#aaa3c0;--accent:#a78bfa;--gold:#f3c969;--line:#ffffff1c}
@@ -52,6 +52,35 @@ section.page{display:none}#homePage{display:block}section.page:target{display:bl
 .ai-card p{margin:0;color:#d2c9e4;font-size:13px;line-height:1.5}
 footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
 @media(max-width:720px){.layout{grid-template-columns:1fr}header{padding-top:21px}.panel{padding:13px}nav{gap:7px}.navbtn{min-height:73px;font-size:13px}}
+
+/* Единая премиальная тема: чёрный, глубокий красный и золото */
+:root{color-scheme:dark;--bg:#080808;--panel:#171313;--muted:#b8aaa2;--accent:#b52b32;--gold:#dfb85f;--line:#dfb85f35}
+body{background:radial-gradient(ellipse at 12% 0%,#4a1015 0,transparent 38%),radial-gradient(ellipse at 95% 12%,#38250e 0,transparent 29%),var(--bg);color:#fff8ed}
+header h1{color:#f3d58d;text-shadow:0 2px 22px #a51e294d}
+header p{color:#c4b5a7}
+.hero{border-color:#d7ad5545;background:linear-gradient(120deg,#351014ee,#171313f2);box-shadow:0 14px 42px #0008}
+.hero .eyebrow,.tag,.placeholder h3,.ai-card h3{color:var(--gold)}
+.navbtn{background:linear-gradient(145deg,#1b1717,#100e0e);color:#fff8ed;border-color:#dfb85f38}
+.navbtn.active{border-color:var(--gold);background:linear-gradient(145deg,#641b20,#241313);box-shadow:0 0 0 1px #dfb85f30,0 8px 24px #0008}
+.panel{background:linear-gradient(145deg,#1b1616f5,#100e0ef5);border-color:#dfb85f30;box-shadow:0 16px 50px #0009}
+.action{background:linear-gradient(135deg,#c3343b,#79151d);color:#fff8ed;box-shadow:0 5px 15px #7e171d35}
+.action.secondary{background:linear-gradient(145deg,#282020,#151111);border:1px solid #dfb85f55;color:#f0d28e}
+.film{background:#211919;border-color:#ffffff13;color:#fff8ed}
+.film.active{border-color:var(--gold);background:#3b1a1d}
+.iptv-category{background:#211919;border-color:#dfb85f38;color:#f5e8d5}
+.iptv-category.active{border-color:var(--gold);background:#641b20;color:#fff8ed}
+.iptv-category small,.num{color:var(--gold)}
+.num{background:#3b171b}
+.status{background:#0c0909;color:#c3b4a7;border:1px solid #dfb85f20}
+.status b{color:var(--gold)}
+.ai-card{background:linear-gradient(130deg,#4a171c,#1d1515);border-color:#b52b3266}
+.ai-card p{color:#e0d1c5}
+.placeholder .soon{background:#35171a;color:#e7c77f;border:1px solid #dfb85f35}
+input[type="search"],input[type="url"]{background:#0c0909!important;color:#fff8ed!important;border-color:#dfb85f55!important}
+input::placeholder{color:#9f9188}
+audio{accent-color:#b52b32}
+footer{color:#95847a}
+@media(hover:hover){.navbtn:hover,.film:hover,.iptv-category:hover{border-color:#dfb85f;filter:brightness(1.12)}.action:hover{filter:brightness(1.13)}}
 </style>
 </head>
 <body>
