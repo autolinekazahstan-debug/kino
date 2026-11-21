@@ -9,6 +9,7 @@ from pathlib import Path
 
 PLAYLIST = Path("films.m3u8")
 OUTPUT = Path("link-status.json")
+REVIEW_DIR = Path("needs-human-intervention")
 TIMEOUT = 12
 WORKERS = 12
 
@@ -69,7 +70,30 @@ def main():
         "note": "HTTP reachability only; playback must be confirmed in the app."
     }
     OUTPUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Checked {len(checked)} URLs: {counts}")
+    # Keep confirmed dead links in a separate human-review folder; never delete
+    # them from the source playlist or silently replace their addresses.
+    failed = [item for item in checked if item["status"] == "unavailable"]
+    REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    playlist_lines = ["#EXTM3U"]
+    for item in failed:
+        title = item["title"].replace("\\r", " ").replace("\\n", " ").replace(",", " ")
+        group = item.get("group", "Требует вмешательства человека").replace("\\r", " ").replace("\\n", " ")
+        playlist_lines.extend([f"#EXTINF:-1 group-title=\\"{group}\\",{title}", item["url"]])
+    (REVIEW_DIR / "films.m3u8").write_text("\\n".join(playlist_lines) + "\\n", encoding="utf-8")
+    readme = [
+        "# Требует вмешательства человека",
+        "",
+        f"Последняя проверка: {report['checked_at']}",
+        f"Фильмов в папке: {len(failed)}",
+        "",
+        "Сюда попадают только адреса, вернувшие HTTP 404 или 410. Проверьте источник, найдите правильный адрес и вручную подтвердите замену.",
+        "Исходный каталог не изменяется автоматически. Ошибки доступа, тайм-ауты и прочие неопределённые ответы не считаются подтверждённо нерабочими.",
+        "",
+        "Отдельный плейлист: films.m3u8",
+        ""
+    ]
+    (REVIEW_DIR / "README.md").write_text("\\n".join(readme), encoding="utf-8")
+    print(f"Checked {len(checked)} URLs: {counts}; human review: {len(failed)}")
 
 if __name__ == "__main__":
     main()
