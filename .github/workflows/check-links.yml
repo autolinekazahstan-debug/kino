@@ -35,4 +35,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update film link health report"
-          file_pattern: link-status.json
+          file_pattern: link-status.json needs-human-intervention/films.m3u8 needs-human-intervention/README.md
