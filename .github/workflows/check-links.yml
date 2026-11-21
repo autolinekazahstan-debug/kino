@@ -1,6 +1,12 @@
 name: Check film playlist links
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'films.m3u8'
+      - 'scripts/check_links.py'
+      - '.github/workflows/check-links.yml'
   workflow_dispatch:
   schedule:
     - cron: "15 3 * * *"
