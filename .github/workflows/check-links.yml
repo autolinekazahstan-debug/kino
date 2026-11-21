@@ -1,0 +1,32 @@
+name: Check film playlist links
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 3 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: film-link-health
+  cancel-in-progress: false
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check playlist URLs
+        run: python scripts/check_links.py
+      - name: Publish report
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update film link health report"
+          file_pattern: link-status.json
