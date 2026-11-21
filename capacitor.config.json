@@ -1,0 +1,6 @@
+{
+  "appId": "com.mymediatheka.app",
+  "appName": "Моя Медиатека",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
