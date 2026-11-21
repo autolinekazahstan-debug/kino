@@ -7,7 +7,7 @@ on:
       - 'index.html'
       - 'package.json'
       - 'package-lock.json'
-      - 'capacitor.config.ts'
+      - 'capacitor.config.json'
       - '.github/workflows/android-apk.yml'
   workflow_dispatch:
 
