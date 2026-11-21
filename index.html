@@ -81,9 +81,73 @@ input::placeholder{color:#9f9188}
 audio{accent-color:#b52b32}
 footer{color:#95847a}
 @media(hover:hover){.navbtn:hover,.film:hover,.iptv-category:hover{border-color:#dfb85f;filter:brightness(1.12)}.action:hover{filter:brightness(1.13)}}
+
+/* Футуристичная кинематографическая заставка */
+:root{--bg:#070b13;--panel:#101a29;--muted:#9aadc2;--accent:#26d9d0;--gold:#b99aff;--line:#42dce044}
+body{background:radial-gradient(ellipse at 12% 0%,#12364a 0,transparent 40%),radial-gradient(ellipse at 95% 12%,#30204f 0,transparent 34%),var(--bg);color:#effaff}
+header h1{color:#c9fbff;text-shadow:0 0 24px #24d9d077}
+header p{color:#9fb8ca}
+.hero{border-color:#4adfe044;background:linear-gradient(120deg,#102c3bee,#19172fee);box-shadow:0 14px 42px #0009}
+.hero .eyebrow,.tag,.placeholder h3,.ai-card h3{color:#72f3e9}
+.navbtn{background:linear-gradient(145deg,#122235,#0b1421);color:#effaff;border-color:#47d8d044}
+.navbtn.active{border-color:#62f5e9;background:linear-gradient(145deg,#12485a,#272044);box-shadow:0 0 22px #25d9d033}
+.panel{background:linear-gradient(145deg,#111f30f5,#0b1420f5);border-color:#4adfe033;box-shadow:0 16px 50px #000a}
+.action{background:linear-gradient(135deg,#19bdb8,#4169d8);color:#fff;box-shadow:0 5px 20px #16cfc833}
+.action.secondary{background:linear-gradient(145deg,#1b3044,#171b30);border:1px solid #8b82d977;color:#c9c1ff}
+.film{background:#142338;border-color:#ffffff14;color:#effaff}
+.film.active{border-color:#67eee5;background:#173b4b}
+.iptv-category{background:#142338;border-color:#42dce044;color:#e5f8ff}
+.iptv-category.active{border-color:#65f0e6;background:#174658;color:#fff}
+.iptv-category small,.num{color:#8af6ed}
+.num{background:#19384a}
+.status{background:#080f19;color:#a9c0d2;border:1px solid #42dce022}
+.status b{color:#7af1e7}
+.ai-card{background:linear-gradient(130deg,#123c4b,#211a3b);border-color:#4adfe055}
+.ai-card h3{color:#8cf5eb}.ai-card p{color:#d1e5f2}
+.placeholder .soon{background:#192a42;color:#c9c0ff;border:1px solid #8b82d955}
+input[type="search"],input[type="url"]{background:#080f19!important;color:#effaff!important;border-color:#42dce055!important}
+input::placeholder{color:#8199ad}
+audio{accent-color:#26d9d0}
+footer{color:#8095a8}
+@media(hover:hover){.navbtn:hover,.film:hover,.iptv-category:hover{border-color:#70f5eb;filter:brightness(1.13)}.action:hover{filter:brightness(1.12)}}
+#cinemaIntro{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#102f45 0,#080d18 48%,#03060b 100%);color:#effaff;opacity:1;visibility:visible;transition:opacity 1.15s ease,visibility 1.15s ease}
+#cinemaIntro.is-gone{opacity:0;visibility:hidden;pointer-events:none}
+#cinemaIntro:before,#cinemaIntro:after{content:"";position:absolute;width:70vmax;height:70vmax;border:1px solid #54e9e433;border-radius:50%;box-shadow:0 0 80px #26d9d022,inset 0 0 80px #26d9d018;animation:orbit 18s linear infinite}
+#cinemaIntro:after{width:48vmax;height:48vmax;border-color:#a88cff35;animation-direction:reverse;animation-duration:24s}
+.intro-grid{position:absolute;inset:0;background-image:linear-gradient(#5fe8e90b 1px,transparent 1px),linear-gradient(90deg,#5fe8e90b 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);transform:perspective(500px) rotateX(58deg) scale(1.8);transform-origin:center 75%}
+.intro-content{position:relative;z-index:2;width:min(90vw,680px);text-align:center;padding:30px 18px;animation:introRise 1.4s ease both}
+.intro-kicker{font-size:10px;letter-spacing:.42em;color:#7cefe6;font-weight:800}
+.intro-emblem{position:relative;width:150px;height:150px;margin:22px auto 26px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#193f57 0,#0b1727 56%,#08101b 70%);border:1px solid #70eee8aa;box-shadow:0 0 35px #25d9d055,0 0 100px #7256c744,inset 0 0 28px #2dd8d633}
+.intro-emblem:before,.intro-emblem:after{content:"";position:absolute;inset:-12px;border:1px solid #7cefe677;border-radius:50%;transform:rotateX(68deg);animation:orbit 8s linear infinite}
+.intro-emblem:after{inset:-23px;border-color:#a88cff88;transform:rotateY(68deg);animation-duration:11s;animation-direction:reverse}
+.intro-human{font-size:43px;filter:drop-shadow(0 0 14px #56d8ff)}
+.intro-ai{position:absolute;right:-9px;bottom:10px;width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#8e76e8,#29c9c4);box-shadow:0 0 24px #8d7bff99;font-size:22px}
+.intro-content h2{margin:0;color:#f0fbff;font-size:clamp(25px,6vw,48px);letter-spacing:.09em;text-shadow:0 0 28px #49dce866}
+.intro-sub{margin:13px auto 0;max-width:480px;color:#a9c4d7;font-size:14px;line-height:1.7}
+.intro-rule{width:115px;height:2px;margin:25px auto;background:linear-gradient(90deg,transparent,#6af1e7,#a88cff,transparent);box-shadow:0 0 14px #50e6df}
+.intro-enter{font-size:10px;letter-spacing:.35em;color:#8debe5}
+#skipIntro{position:absolute;z-index:3;right:20px;bottom:22px;border:1px solid #72e9e566;border-radius:30px;background:#0b1729cc;color:#d9faff;padding:10px 17px;font-size:12px}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes introRise{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){#cinemaIntro:before,#cinemaIntro:after,.intro-emblem:before,.intro-emblem:after,.intro-content{animation:none}}
+
 </style>
 </head>
 <body>
+
+<div id="cinemaIntro" aria-label="Заставка Моя медиатека">
+ <div class="intro-grid"></div>
+ <div class="intro-content">
+  <div class="intro-kicker">НОВОЕ ПРОСТРАНСТВО РАЗВЛЕЧЕНИЙ</div>
+  <div class="intro-emblem"><span class="intro-human">◉</span><span class="intro-ai">✧</span></div>
+  <h2>МОЯ МЕДИАТЕКА</h2>
+  <p class="intro-sub">Человек и искусственный интеллект.<br>Один мир — безграничные впечатления.</p>
+  <div class="intro-rule"></div>
+  <div class="intro-enter">ТВОЙ ЛИЧНЫЙ МЕДИАМИР</div>
+ </div>
+ <button id="skipIntro" type="button">Пропустить заставку →</button>
+</div>
+
 <header><h1>МОЯ МЕДИАТЕКА</h1><p>Твоя личная коллекция развлечений · 351 фильм</p></header>
 <main>
   <section class="hero">
@@ -384,6 +448,14 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
  });
  window.addEventListener("beforeunload",()=>tracks.forEach(t=>URL.revokeObjectURL(t.url)));
  render();
+})();
+
+
+/* Заставка показывается при каждом открытии сайта по ссылке */
+(()=>{const intro=document.getElementById("cinemaIntro");if(!intro)return;
+ const close=()=>{intro.classList.add("is-gone");window.setTimeout(()=>intro.remove(),1300);};
+ document.getElementById("skipIntro")?.addEventListener("click",close);
+ window.setTimeout(close,8500);
 })();
 
 </script>
