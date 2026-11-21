@@ -121,10 +121,32 @@ footer{text-align:center;color:#827a98;font-size:11px;padding:20px 10px}
       </aside>
     </div>
   </section>
-  <section id="musicPage" class="panel placeholder page">
-    <div class="bigico">🎵</div><h3>Музыка</h3>
-    <p>Здесь разместим музыкальную библиотеку, исполнителей, альбомы и аудиоплеер.</p>
-    <span class="soon">Раздел подготовлен · подключение впереди</span>
+  <section id="musicPage" class="panel page">
+    <div class="section-head"><h3>🎵 Музыкальная библиотека</h3><span class="tag" id="musicCount">0 ТРЕКОВ</span></div>
+    <p class="hint">Подключи флешку к телефону через USB-OTG и выбери аудиофайлы. Можно добавить сразу несколько композиций. Файлы остаются на флешке и не загружаются на сайт.</p>
+    <div class="actions" style="margin:12px 0">
+      <label class="action" for="musicFiles" style="display:inline-flex;align-items:center;cursor:pointer">＋ Добавить музыку с флешки</label>
+      <input id="musicFiles" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.opus" multiple hidden>
+      <button class="action secondary" id="musicClear" type="button">Очистить список</button>
+    </div>
+    <div class="status" id="musicStatus">Статус: <b>выбери аудиофайлы на флешке</b></div>
+    <section class="panel" style="margin-top:14px">
+      <div class="section-head"><h3 id="musicNow">Выбери композицию</h3><span class="tag">АУДИОПЛЕЕР</span></div>
+      <audio id="audioPlayer" controls preload="metadata" style="width:100%"></audio>
+      <div class="actions">
+        <button class="action secondary" id="musicPrev" type="button" disabled>⏮ Предыдущая</button>
+        <button class="action secondary" id="musicNext" type="button" disabled>Следующая ⏭</button>
+        <button class="action secondary" id="musicFavorite" type="button" disabled>♡ В избранное</button>
+      </div>
+    </section>
+    <div class="section-head" style="margin-top:17px"><h3>Моя музыка</h3><span class="tag" id="musicVisible">0</span></div>
+    <input id="musicSearch" type="search" placeholder="Поиск по названию файла..." style="width:100%;margin:0 0 10px;padding:11px;border-radius:10px;border:1px solid #ffffff2b;background:#0d0a18;color:#fff">
+    <div class="iptv-categories" id="musicFilters">
+      <button class="iptv-category active" type="button" data-filter="all">Все треки</button>
+      <button class="iptv-category" type="button" data-filter="favorites">♡ Избранное</button>
+    </div>
+    <div class="list" id="musicList" style="max-height:52vh"><p class="hint">Пока нет добавленных композиций. Нажми «Добавить музыку с флешки».</p></div>
+    <p class="hint" style="margin-top:12px">Браузер не сохраняет доступ к USB-флешке после обновления страницы. При следующем посещении файлы нужно выбрать снова. Постоянную библиотеку с хранением на сервере можно подключить отдельным этапом.</p>
   </section>
   <section id="clipsPage" class="panel placeholder page">
     <div class="bigico">🎞️</div><h3>Клипы</h3>
@@ -272,6 +294,69 @@ stop.addEventListener("click",()=>{video.pause();video.removeAttribute("src");vi
 video.addEventListener("playing",()=>setStatus("воспроизведение"));
 video.addEventListener("waiting",()=>setStatus("загрузка потока…"));
 video.addEventListener("error",()=>setStatus("ошибка загрузки: ссылка недоступна или формат не поддерживается"));
+
+/* Музыкальная библиотека: локальные файлы пользователя, без серверной загрузки */
+(()=>{
+ const picker=document.getElementById("musicFiles"),player=document.getElementById("audioPlayer");
+ const list=document.getElementById("musicList"),search=document.getElementById("musicSearch");
+ const status=document.getElementById("musicStatus"),count=document.getElementById("musicCount");
+ const visible=document.getElementById("musicVisible"),now=document.getElementById("musicNow");
+ const prev=document.getElementById("musicPrev"),next=document.getElementById("musicNext");
+ const fav=document.getElementById("musicFavorite"),clear=document.getElementById("musicClear");
+ if(!picker||!player)return;
+ let tracks=[],current=-1,filter="all",favorites=new Set();
+ try{favorites=new Set(JSON.parse(localStorage.getItem("myMediaMusicFavorites")||"[]"));}catch(e){}
+ const key=t=>[t.name,t.size,t.lastModified].join("::");
+ const isFav=t=>favorites.has(key(t));
+ const say=t=>{status.innerHTML="Статус: <b></b>";status.querySelector("b").textContent=t;};
+ const size=n=>n<1048576?Math.round(n/1024)+" КБ":(n/1048576).toFixed(1)+" МБ";
+ function render(){
+  const q=search.value.trim().toLocaleLowerCase("ru");
+  const rows=tracks.map((t,i)=>({t,i})).filter(x=>(filter==="all"||(filter==="favorites"&&isFav(x.t)))&&x.t.name.toLocaleLowerCase("ru").includes(q));
+  list.innerHTML="";count.textContent=tracks.length+" ТРЕКОВ";visible.textContent=rows.length;
+  if(!rows.length){const p=document.createElement("p");p.className="hint";p.textContent=tracks.length?"Поиск ничего не нашёл.":"Добавь музыку с флешки, чтобы начать слушать.";list.append(p);return;}
+  rows.forEach(({t,i})=>{
+   const b=document.createElement("button");b.type="button";b.className="film"+(i===current?" active":"");
+   const n=document.createElement("span");n.className="num";n.textContent=isFav(t)?"♥":String(i+1).padStart(2,"0");
+   const w=document.createElement("span"),title=document.createElement("strong"),meta=document.createElement("small");
+   title.textContent=t.name;meta.textContent=size(t.size)+(isFav(t)?" · Избранное":"");w.append(title,meta);b.append(n,w);
+   b.addEventListener("click",()=>playAt(i));list.append(b);
+  });
+ }
+ function playAt(i){
+  if(i<0||i>=tracks.length)return;
+  current=i;const t=tracks[i];player.src=t.url;now.textContent=t.name;
+  prev.disabled=next.disabled=fav.disabled=false;fav.textContent=isFav(t)?"♥ В избранном":"♡ В избранное";
+  render();player.play().then(()=>say("воспроизведение: "+t.name)).catch(()=>say("трек выбран — нажми Play; формат может не поддерживаться браузером"));
+ }
+ picker.addEventListener("change",e=>{
+  const files=[...e.target.files].filter(f=>f.type.startsWith("audio/")||/\.(mp3|m4a|aac|ogg|wav|opus)$/i.test(f.name));
+  tracks.forEach(t=>URL.revokeObjectURL(t.url));
+  tracks=files.map(file=>({name:file.name,size:file.size,lastModified:file.lastModified,url:URL.createObjectURL(file)}));
+  current=-1;player.pause();player.removeAttribute("src");player.load();now.textContent="Выбери композицию";
+  prev.disabled=next.disabled=fav.disabled=true;fav.textContent="♡ В избранное";
+  say(files.length?"добавлено файлов: "+files.length:"аудиофайлы не выбраны");render();picker.value="";
+ });
+ search.addEventListener("input",render);
+ document.querySelectorAll("#musicFilters button").forEach(b=>b.addEventListener("click",()=>{
+  filter=b.dataset.filter;document.querySelectorAll("#musicFilters button").forEach(x=>x.classList.toggle("active",x===b));render();
+ }));
+ prev.addEventListener("click",()=>{if(tracks.length)playAt((current-1+tracks.length)%tracks.length);});
+ next.addEventListener("click",()=>{if(tracks.length)playAt((current+1)%tracks.length);});
+ player.addEventListener("ended",()=>{if(current>=0&&current<tracks.length-1)playAt(current+1);});
+ fav.addEventListener("click",()=>{
+  if(current<0)return;const k=key(tracks[current]);if(favorites.has(k))favorites.delete(k);else favorites.add(k);
+  try{localStorage.setItem("myMediaMusicFavorites",JSON.stringify([...favorites]));}catch(e){}
+  fav.textContent=isFav(tracks[current])?"♥ В избранном":"♡ В избранное";render();
+ });
+ clear.addEventListener("click",()=>{
+  player.pause();player.removeAttribute("src");player.load();tracks.forEach(t=>URL.revokeObjectURL(t.url));tracks=[];current=-1;
+  now.textContent="Выбери композицию";prev.disabled=next.disabled=fav.disabled=true;fav.textContent="♡ В избранное";say("список очищен");render();
+ });
+ window.addEventListener("beforeunload",()=>tracks.forEach(t=>URL.revokeObjectURL(t.url)));
+ render();
+})();
+
 </script>
 </body>
 </html>
