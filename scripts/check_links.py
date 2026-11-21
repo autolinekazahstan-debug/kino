@@ -3,7 +3,6 @@
 import concurrent.futures
 import datetime as dt
 import json
-import re
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -15,7 +14,7 @@ WORKERS = 12
 
 def parse_playlist(text):
     items, title, group = [], "Без названия", ""
-    for raw in text.lstrip("\\ufeff").splitlines():
+    for raw in text.lstrip("\ufeff").splitlines():
         line = raw.strip()
         if not line:
             continue
@@ -69,7 +68,7 @@ def main():
         "items": checked,
         "note": "HTTP reachability only; playback must be confirmed in the app."
     }
-    OUTPUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    OUTPUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Checked {len(checked)} URLs: {counts}")
 
 if __name__ == "__main__":
