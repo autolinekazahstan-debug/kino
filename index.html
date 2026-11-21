@@ -163,17 +163,82 @@ header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
 .ai-card{background:linear-gradient(125deg,#123b4b,#251d3d);border-color:#54dfe077}
 .ai-card h3{color:#91f4ec}
 .action{background:linear-gradient(130deg,#19bdbb,#6864d7)}
+
+/* Новая заставка: 14-секундная анимированная сцена пробуждения ИИ */
+#cinemaIntro{isolation:isolate;background:#020711;overflow:hidden}
+#cinemaIntro .ai-void{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,#103d55 0,transparent 27%),radial-gradient(ellipse at 50% 100%,#17143c 0,transparent 48%);opacity:0;animation:aiVoid 14s ease both}
+#cinemaIntro .ai-stars{position:absolute;inset:-20%;opacity:0;background-image:radial-gradient(2px 2px at 20% 25%,#fff 99%,transparent),radial-gradient(2px 2px at 72% 18%,#78f5ff 99%,transparent),radial-gradient(1px 1px at 42% 72%,#b9a5ff 99%,transparent),radial-gradient(2px 2px at 84% 65%,#fff 99%,transparent);background-size:190px 170px;animation:aiStars 14s ease both}
+#cinemaIntro .ai-grid{position:absolute;left:-30%;right:-30%;bottom:-36%;height:75%;opacity:0;background-image:linear-gradient(#65eaff22 1px,transparent 1px),linear-gradient(90deg,#65eaff22 1px,transparent 1px);background-size:42px 42px;transform:perspective(380px) rotateX(62deg);mask-image:linear-gradient(transparent,#000 30%,transparent);animation:aiGrid 14s ease both}
+#cinemaIntro .ai-core{position:absolute;left:50%;top:40%;width:clamp(100px,25vw,170px);aspect-ratio:1;transform:translate(-50%,-50%) scale(.05);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#e7ffff 0 2%,#50e8f4 5%,#175b78 22%,#101b39 58%,#050b17 72%);border:1px solid #9ffaff;box-shadow:0 0 25px #3beeff,0 0 90px #20cdeaaa,inset 0 0 35px #9ffaff77;opacity:0;animation:aiCore 14s cubic-bezier(.15,.75,.2,1) both;z-index:2}
+#cinemaIntro .ai-core:before,#cinemaIntro .ai-core:after{content:"";position:absolute;inset:-18%;border:1px solid #5cefff99;border-radius:50%;transform:rotateX(68deg);box-shadow:0 0 22px #34dff766}
+#cinemaIntro .ai-core:after{inset:-32%;border-color:#a78bfa99;transform:rotateY(68deg)}
+#cinemaIntro .ai-core b{font-size:clamp(24px,7vw,44px);letter-spacing:.1em;color:#eaffff;text-shadow:0 0 22px #6ffaff}
+#cinemaIntro .ai-core i{position:absolute;inset:10%;border-radius:50%;border:1px dashed #a8faffaa;animation:aiSpin 5s linear infinite}
+#cinemaIntro .ai-core span{position:absolute;width:9px;height:9px;border-radius:50%;background:white;box-shadow:0 0 24px 9px #7ffaff}
+#cinemaIntro .ai-rings{position:absolute;left:50%;top:40%;width:min(85vw,520px);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:aiRings 14s ease both}
+#cinemaIntro .ai-rings i{position:absolute;inset:8%;border:1px solid #4be9f277;border-radius:50%;transform:rotateX(68deg);animation:aiSpin 12s linear infinite}
+#cinemaIntro .ai-rings i:nth-child(2){inset:0;border-color:#a78bfa77;transform:rotateY(68deg);animation-direction:reverse}
+#cinemaIntro .ai-rings i:nth-child(3){inset:18%;border-style:dashed;animation-duration:18s}
+#cinemaIntro .ai-beams{position:absolute;inset:0;opacity:0;background:linear-gradient(110deg,transparent 35%,#6ffaff33 49%,#fff9 50%,#6ffaff33 51%,transparent 65%);transform:translateX(-120%);animation:aiBeam 14s ease both}
+#cinemaIntro .ai-holo{position:absolute;z-index:3;display:grid;place-items:center;gap:4px;width:76px;height:76px;border:1px solid #69efff99;border-radius:18px;background:#0b2039aa;color:#a8fbff;font-size:25px;box-shadow:0 0 25px #39dff755;opacity:0}
+#cinemaIntro .ai-holo small{font-size:8px;letter-spacing:.16em}
+#cinemaIntro .holo-film{left:12%;top:31%;animation:aiFilm 14s ease both}
+#cinemaIntro .holo-tv{right:12%;top:31%;animation:aiTv 14s ease both}
+#cinemaIntro .holo-music{left:17%;top:58%;animation:aiMusic 14s ease both}
+#cinemaIntro .holo-discover{right:17%;top:58%;animation:aiDiscover 14s ease both}
+#cinemaIntro .ai-human,#cinemaIntro .ai-partner{position:absolute;bottom:8%;width:clamp(54px,13vw,90px);height:clamp(105px,24vh,160px);border-radius:48% 48% 12px 12px;opacity:0;z-index:2}
+#cinemaIntro .ai-human{left:calc(50% - clamp(100px,24vw,155px));background:linear-gradient(90deg,#050c16,#31617a,#10192b);box-shadow:0 0 35px #4be9ff66;animation:aiHuman 14s ease both}
+#cinemaIntro .ai-partner{right:calc(50% - clamp(100px,24vw,155px));background:linear-gradient(90deg,#10172b,#6a65a8,#18223a);box-shadow:0 0 40px #a78bfa88;animation:aiPartner 14s ease both}
+#cinemaIntro .ai-human:before,#cinemaIntro .ai-partner:before{content:"";position:absolute;left:15%;top:-43px;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#9cecff,#14263c 70%);border:1px solid #8df4ff99;box-shadow:0 0 25px #43dfff77}
+#cinemaIntro .ai-partner:before{background:radial-gradient(circle at 45% 40%,#b8ffff,#7569b9 25%,#151d37 70%);border-color:#c4aaff}
+#cinemaIntro .ai-partner span{position:absolute;top:-34px;left:38%;color:#baffff;font-size:22px;text-shadow:0 0 18px #7ffaff}
+#cinemaIntro .ai-link{position:absolute;left:50%;bottom:25%;width:0;height:2px;background:linear-gradient(90deg,transparent,#79faff,#c0a5ff,transparent);box-shadow:0 0 22px #71faff;opacity:0;animation:aiLink 14s ease both}
+#cinemaIntro .ai-message{position:absolute;top:66%;left:5%;right:5%;display:grid;gap:9px;text-align:center;opacity:0;animation:aiMessage 14s ease both}
+#cinemaIntro .ai-message b{font-size:clamp(9px,2vw,12px);letter-spacing:.2em;color:#85f5ee}
+#cinemaIntro .ai-message span{font-size:clamp(12px,3vw,16px);color:#d4e9f4}
+#cinemaIntro .ai-brand{position:absolute;z-index:4;left:5%;right:5%;top:37%;display:grid;justify-items:center;gap:12px;text-align:center;opacity:0;animation:aiBrand 14s ease both}
+#cinemaIntro .ai-brand small,#cinemaIntro .ai-brand span{font-size:9px;letter-spacing:.28em;color:#a5f8f3}
+#cinemaIntro .ai-brand strong{font-size:clamp(25px,7vw,49px);letter-spacing:.1em;color:#f3fdff;text-shadow:0 0 12px #51e8f5,0 0 42px #47cfff}
+#cinemaIntro .ai-brand i{width:130px;height:2px;background:linear-gradient(90deg,transparent,#6af8ed,#b6a1ff,transparent);box-shadow:0 0 15px #6af8ed}
+#cinemaIntro #skipIntro{font-size:12px}
+@keyframes aiVoid{0%,8%{opacity:0}16%,100%{opacity:1}}
+@keyframes aiStars{0%,10%{opacity:0}20%,100%{opacity:.65}}
+@keyframes aiGrid{0%,48%{opacity:0}60%,100%{opacity:.5}}
+@keyframes aiCore{0%,12%{opacity:0;transform:translate(-50%,-50%) scale(.05)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}30%,53%{opacity:1;transform:translate(-50%,-50%) scale(1)}62%,100%{opacity:0;transform:translate(-50%,-50%) scale(.55)}}
+@keyframes aiRings{0%,18%{opacity:0;transform:translate(-50%,-50%) scale(.3)}30%,55%{opacity:.85;transform:translate(-50%,-50%) scale(1)}65%,100%{opacity:0}}
+@keyframes aiSpin{to{rotate:360deg}}
+@keyframes aiBeam{0%,26%{opacity:0;transform:translateX(-120%)}35%,55%{opacity:1;transform:translateX(120%)}65%,100%{opacity:0}}
+@keyframes aiFilm{0%,35%{opacity:0;transform:translate(-20px,15px) scale(.6)}43%,57%{opacity:1;transform:none}66%,100%{opacity:0}}
+@keyframes aiTv{0%,36%{opacity:0;transform:translate(20px,15px) scale(.6)}44%,57%{opacity:1;transform:none}66%,100%{opacity:0}}
+@keyframes aiMusic{0%,40%{opacity:0;transform:translate(-20px,15px) scale(.6)}47%,57%{opacity:1;transform:none}66%,100%{opacity:0}}
+@keyframes aiDiscover{0%,41%{opacity:0;transform:translate(20px,15px) scale(.6)}48%,57%{opacity:1;transform:none}66%,100%{opacity:0}}
+@keyframes aiHuman{0%,53%{opacity:0;transform:translateX(-30px)}63%,78%{opacity:1;transform:translateX(0)}90%,100%{opacity:0}}
+@keyframes aiPartner{0%,53%{opacity:0;transform:translateX(30px)}63%,78%{opacity:1;transform:translateX(0)}90%,100%{opacity:0}}
+@keyframes aiLink{0%,66%{opacity:0;width:0}75%,82%{opacity:1;width:clamp(80px,22vw,160px)}90%,100%{opacity:0;width:0}}
+@keyframes aiMessage{0%,61%{opacity:0;transform:translateY(10px)}68%,81%{opacity:1;transform:none}90%,100%{opacity:0}}
+@keyframes aiBrand{0%,77%{opacity:0;transform:scale(.94);filter:blur(8px)}85%,94%{opacity:1;transform:scale(1);filter:blur(0)}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){#cinemaIntro *{animation-duration:1ms!important;animation-iteration-count:1!important}}
+
 </style>
 </head>
 <body>
 
-<div id="cinemaIntro" aria-label="Кинематографическая заставка">
- <div class="cinema-stars"></div><div class="cinema-screen"><strong>МОЯ МЕДИАТЕКА</strong><small>ТВОЙ ЛИЧНЫЙ МИР РАЗВЛЕЧЕНИЙ</small></div>
- <div class="cinema-figures"><div class="human"><i></i></div><div class="ai"><i>✧</i></div></div>
- <div class="cinema-copy"><b>ЧЕЛОВЕК · ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ</b><p>Два разума. Один мир впечатлений.<br>Твой персональный кинотеатр начинается здесь.</p><span>ПРИЯТНОГО ПРОСМОТРА</span></div>
- <button id="skipIntro" type="button">Перейти в медиатеку →</button>
+<div id="cinemaIntro" aria-label="Анимированная заставка: пробуждение искусственного интеллекта">
+ <div class="ai-void"></div><div class="ai-stars"></div><div class="ai-grid"></div>
+ <div class="ai-core"><i></i><b>AI</b><span></span></div>
+ <div class="ai-rings"><i></i><i></i><i></i></div>
+ <div class="ai-beams"></div>
+ <div class="ai-holo holo-film">🎬 <small>КИНО</small></div>
+ <div class="ai-holo holo-tv">📡 <small>ТВ</small></div>
+ <div class="ai-holo holo-music">♫ <small>МУЗЫКА</small></div>
+ <div class="ai-holo holo-discover">✧ <small>ОТКРЫТИЯ</small></div>
+ <div class="ai-human" aria-hidden="true"><span></span></div>
+ <div class="ai-partner" aria-hidden="true"><span>✧</span></div>
+ <div class="ai-link"></div>
+ <div class="ai-message"><b>ИНТЕЛЛЕКТУАЛЬНАЯ СИСТЕМА АКТИВИРОВАНА</b><span>Человек задаёт направление. ИИ открывает возможности.</span></div>
+ <div class="ai-brand"><small>ТВОЙ ПЕРСОНАЛЬНЫЙ МИР РАЗВЛЕЧЕНИЙ</small><strong>МОЯ МЕДИАТЕКА</strong><i></i><span>ЧЕЛОВЕК · ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ</span></div>
+ <button id="skipIntro" type="button">Пропустить заставку →</button>
 </div>
-
 <header><h1>МОЯ МЕДИАТЕКА</h1><p>Твоя личная коллекция развлечений · 351 фильм</p></header>
 <main>
   <section class="hero">
