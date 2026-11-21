@@ -82,19 +82,20 @@ audio{accent-color:#b52b32}
 footer{color:#95847a}
 @media(hover:hover){.navbtn:hover,.film:hover,.iptv-category:hover{border-color:#dfb85f;filter:brightness(1.12)}.action:hover{filter:brightness(1.13)}}
 
-/* Футуристичная кинематографическая заставка */
-:root{--bg:#070b13;--panel:#101a29;--muted:#9aadc2;--accent:#26d9d0;--gold:#b99aff;--line:#42dce044}
-body{background:radial-gradient(ellipse at 12% 0%,#12364a 0,transparent 40%),radial-gradient(ellipse at 95% 12%,#30204f 0,transparent 34%),var(--bg);color:#effaff}
-header h1{color:#c9fbff;text-shadow:0 0 24px #24d9d077}
-header p{color:#9fb8ca}
-.hero{border-color:#4adfe044;background:linear-gradient(120deg,#102c3bee,#19172fee);box-shadow:0 14px 42px #0009}
-.hero .eyebrow,.tag,.placeholder h3,.ai-card h3{color:#72f3e9}
-.navbtn{background:linear-gradient(145deg,#122235,#0b1421);color:#effaff;border-color:#47d8d044}
-.navbtn.active{border-color:#62f5e9;background:linear-gradient(145deg,#12485a,#272044);box-shadow:0 0 22px #25d9d033}
-.panel{background:linear-gradient(145deg,#111f30f5,#0b1420f5);border-color:#4adfe033;box-shadow:0 16px 50px #000a}
-.action{background:linear-gradient(135deg,#19bdb8,#4169d8);color:#fff;box-shadow:0 5px 20px #16cfc833}
-.action.secondary{background:linear-gradient(145deg,#1b3044,#171b30);border:1px solid #8b82d977;color:#c9c1ff}
-.film{background:#142338;border-color:#ffffff14;color:#effaff}
+
+/* Единая концепция: премиальный домашний кинотеатр и союз человека с ИИ */
+:root{color-scheme:dark;--bg:#080b12;--panel:#111a27;--muted:#a8b5c5;--accent:#29d7d0;--gold:#c3a7ff;--line:#57dfe044}
+body{background:radial-gradient(ellipse at 12% 0%,#103849 0,transparent 40%),radial-gradient(ellipse at 95% 12%,#302044 0,transparent 34%),var(--bg);color:#f1f8ff}
+header h1{color:#d7fbff;text-shadow:0 0 24px #24d9d077}
+header p{color:#a9bbcd}
+.hero{border-color:#58e8df55;background:linear-gradient(120deg,#12384aee,#211a34ee);box-shadow:0 14px 42px #0009}
+.hero .eyebrow,.tag,.placeholder h3,.ai-card h3{color:#80eee7}
+.navbtn{background:linear-gradient(145deg,#142437,#0b1420);color:#effaff;border-color:#47d8d044}
+.navbtn.active{border-color:#72f4e9;background:linear-gradient(145deg,#145064,#302347);box-shadow:0 0 24px #25d9d033}
+.panel{background:linear-gradient(145deg,#142235f5,#0b1420f5);border-color:#4adfe044;box-shadow:0 16px 50px #000a}
+.action{background:linear-gradient(135deg,#16bdb8,#5964d9);color:#fff;box-shadow:0 5px 20px #16cfc833}
+.action.secondary{background:linear-gradient(145deg,#1b3044,#201a35);border:1px solid #9b88df88;color:#d8ceff}
+.film{background:#142338;border-color:#ffffff17;color:#effaff}
 .film.active{border-color:#67eee5;background:#173b4b}
 .iptv-category{background:#142338;border-color:#42dce044;color:#e5f8ff}
 .iptv-category.active{border-color:#65f0e6;background:#174658;color:#fff}
@@ -102,15 +103,15 @@ header p{color:#9fb8ca}
 .num{background:#19384a}
 .status{background:#080f19;color:#a9c0d2;border:1px solid #42dce022}
 .status b{color:#7af1e7}
-.ai-card{background:linear-gradient(130deg,#123c4b,#211a3b);border-color:#4adfe055}
+.ai-card{background:linear-gradient(130deg,#123c4b,#241a40);border-color:#4adfe066}
 .ai-card h3{color:#8cf5eb}.ai-card p{color:#d1e5f2}
-.placeholder .soon{background:#192a42;color:#c9c0ff;border:1px solid #8b82d955}
+.placeholder .soon{background:#192a42;color:#d1c5ff;border:1px solid #8b82d955}
 input[type="search"],input[type="url"]{background:#080f19!important;color:#effaff!important;border-color:#42dce055!important}
 input::placeholder{color:#8199ad}
 audio{accent-color:#26d9d0}
 footer{color:#8095a8}
 @media(hover:hover){.navbtn:hover,.film:hover,.iptv-category:hover{border-color:#70f5eb;filter:brightness(1.13)}.action:hover{filter:brightness(1.12)}}
-#cinemaIntro{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#102f45 0,#080d18 48%,#03060b 100%);color:#effaff;opacity:1;visibility:visible;transition:opacity 1.15s ease,visibility 1.15s ease}
+#cinemaIntro{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#123b50 0,#080d18 48%,#03060b 100%);color:#effaff;opacity:1;visibility:visible;transition:opacity 1.15s ease,visibility 1.15s ease}
 #cinemaIntro.is-gone{opacity:0;visibility:hidden;pointer-events:none}
 #cinemaIntro:before,#cinemaIntro:after{content:"";position:absolute;width:70vmax;height:70vmax;border:1px solid #54e9e433;border-radius:50%;box-shadow:0 0 80px #26d9d022,inset 0 0 80px #26d9d018;animation:orbit 18s linear infinite}
 #cinemaIntro:after{width:48vmax;height:48vmax;border-color:#a88cff35;animation-direction:reverse;animation-duration:24s}
@@ -123,7 +124,7 @@ footer{color:#8095a8}
 .intro-human{font-size:43px;filter:drop-shadow(0 0 14px #56d8ff)}
 .intro-ai{position:absolute;right:-9px;bottom:10px;width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#8e76e8,#29c9c4);box-shadow:0 0 24px #8d7bff99;font-size:22px}
 .intro-content h2{margin:0;color:#f0fbff;font-size:clamp(25px,6vw,48px);letter-spacing:.09em;text-shadow:0 0 28px #49dce866}
-.intro-sub{margin:13px auto 0;max-width:480px;color:#a9c4d7;font-size:14px;line-height:1.7}
+.intro-sub{margin:13px auto 0;max-width:480px;color:#b8cede;font-size:14px;line-height:1.7}
 .intro-rule{width:115px;height:2px;margin:25px auto;background:linear-gradient(90deg,transparent,#6af1e7,#a88cff,transparent);box-shadow:0 0 14px #50e6df}
 .intro-enter{font-size:10px;letter-spacing:.35em;color:#8debe5}
 #skipIntro{position:absolute;z-index:3;right:20px;bottom:22px;border:1px solid #72e9e566;border-radius:30px;background:#0b1729cc;color:#d9faff;padding:10px 17px;font-size:12px}
