@@ -132,29 +132,54 @@ footer{color:#8095a8}
 @keyframes introRise{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){#cinemaIntro:before,#cinemaIntro:after,.intro-emblem:before,.intro-emblem:after,.intro-content{animation:none}}
 
+
+/* Cinematic opening: a human and AI enter their own theatre */
+#cinemaIntro{background:radial-gradient(ellipse at 50% 35%,#17415b,#091321 52%,#02050a);color:#f3fbff}
+.cinema-stars{position:absolute;inset:0;opacity:.4;background-image:radial-gradient(2px 2px at 20% 20%,#fff 99%,transparent),radial-gradient(1px 1px at 75% 28%,#7cecf5 99%,transparent),radial-gradient(1px 1px at 35% 68%,#c5aaff 99%,transparent);background-size:230px 190px}
+.cinema-screen{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:min(78vw,680px);height:32%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:linear-gradient(140deg,#123c50,#111a2d 65%,#302044);border:1px solid #78eaf0aa;box-shadow:0 0 40px #38dbe866,0 0 130px #8b71d955,inset 0 0 55px #39d6e522;animation:screenPulse 3s ease-in-out infinite alternate}
+.cinema-screen:after{content:"";position:absolute;inset:9px;border:1px solid #b9a4ff66}
+.cinema-screen strong{font-size:clamp(22px,5vw,43px);letter-spacing:.12em;text-shadow:0 0 24px #67eaf5}
+.cinema-screen small{font-size:9px;letter-spacing:.3em;color:#b9dce8}
+.cinema-figures{position:absolute;bottom:8%;left:0;right:0;display:flex;justify-content:center;align-items:end;gap:clamp(70px,20vw,190px);height:37%}
+.cinema-figures .human,.cinema-figures .ai{position:relative;width:82px;height:145px;border-radius:42px 42px 12px 12px;background:linear-gradient(90deg,#050910,#25475c,#080d16);box-shadow:0 0 36px #43d9ed44}
+.cinema-figures .human:before,.cinema-figures .ai:before{content:"";position:absolute;left:13px;top:-48px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#577b91,#09121e 72%);border:1px solid #69dce777}
+.cinema-figures .ai{height:158px;width:88px;background:linear-gradient(90deg,#121b31,#53618a,#101a2b);box-shadow:0 0 42px #a88cff77}
+.cinema-figures .ai:before{background:radial-gradient(circle,#a7faff 0 5%,#6078a7 20%,#111a30 72%);border-color:#b3a1ff}
+.cinema-figures .ai i{position:absolute;top:-34px;left:34px;color:#a9faff;font-size:24px;text-shadow:0 0 18px #5cefff}
+.cinema-copy{position:absolute;z-index:2;top:48%;left:5%;right:5%;text-align:center;text-shadow:0 2px 15px #000}
+.cinema-copy b{font-size:10px;letter-spacing:.28em;color:#91f2ed}
+.cinema-copy p{font-size:clamp(13px,2.5vw,17px);line-height:1.6;color:#d1e2ef}
+.cinema-copy span{font-size:9px;letter-spacing:.35em;color:#c4b2ff}
+#skipIntro{border:1px solid #78eaf088;background:#0b1729ed;color:#e7fcff}
+@keyframes screenPulse{to{filter:brightness(1.2);box-shadow:0 0 55px #38dbe899,0 0 150px #8b71d977}}
+/* One coherent futuristic premium visual language across the actual menu */
+body{background:radial-gradient(ellipse at 50% -8%,#123c50 0,transparent 46%),radial-gradient(ellipse at 95% 20%,#302044 0,transparent 33%),#070b12;color:#f2f8ff}
+header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
+.hero{background:linear-gradient(115deg,#103448ee,#171b30ee 65%,#281d3bee);border:1px solid #55dce066;box-shadow:0 14px 42px #0009}
+.hero .eyebrow,.tag{color:#8df0e9}
+.navbtn{background:linear-gradient(145deg,#14283b,#101522);border-color:#4adce055}
+.navbtn.active{background:linear-gradient(145deg,#14536a,#302447);border-color:#7aeee9;box-shadow:0 0 22px #35d8d833}
+.panel{border-color:#4adce044}
+.ai-card{background:linear-gradient(125deg,#123b4b,#251d3d);border-color:#54dfe077}
+.ai-card h3{color:#91f4ec}
+.action{background:linear-gradient(130deg,#19bdbb,#6864d7)}
 </style>
 </head>
 <body>
 
-<div id="cinemaIntro" aria-label="Заставка Моя медиатека">
- <div class="intro-grid"></div>
- <div class="intro-content">
-  <div class="intro-kicker">НОВОЕ ПРОСТРАНСТВО РАЗВЛЕЧЕНИЙ</div>
-  <div class="intro-emblem"><span class="intro-human">◉</span><span class="intro-ai">✧</span></div>
-  <h2>МОЯ МЕДИАТЕКА</h2>
-  <p class="intro-sub">Человек и искусственный интеллект.<br>Один мир — безграничные впечатления.</p>
-  <div class="intro-rule"></div>
-  <div class="intro-enter">ТВОЙ ЛИЧНЫЙ МЕДИАМИР</div>
- </div>
- <button id="skipIntro" type="button">Пропустить заставку →</button>
+<div id="cinemaIntro" aria-label="Кинематографическая заставка">
+ <div class="cinema-stars"></div><div class="cinema-screen"><strong>МОЯ МЕДИАТЕКА</strong><small>ТВОЙ ЛИЧНЫЙ МИР РАЗВЛЕЧЕНИЙ</small></div>
+ <div class="cinema-figures"><div class="human"><i></i></div><div class="ai"><i>✧</i></div></div>
+ <div class="cinema-copy"><b>ЧЕЛОВЕК · ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ</b><p>Два разума. Один мир впечатлений.<br>Твой персональный кинотеатр начинается здесь.</p><span>ПРИЯТНОГО ПРОСМОТРА</span></div>
+ <button id="skipIntro" type="button">Перейти в медиатеку →</button>
 </div>
 
 <header><h1>МОЯ МЕДИАТЕКА</h1><p>Твоя личная коллекция развлечений · 351 фильм</p></header>
 <main>
   <section class="hero">
-    <div class="eyebrow">ТВОЁ МЕДИАПРОСТРАНСТВО</div>
-    <h2>Всё любимое — в одном месте</h2>
-    <p>Фильмы, телевидение, музыка и клипы. Выбирай раздел и устраивайся поудобнее.</p>
+    <div class="eyebrow">ЧЕЛОВЕК + ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ</div>
+    <h2>Твой личный кинотеатр нового поколения</h2>
+    <p>Человек и ИИ открывают развлечения вместе: фильмы, телевидение, музыка и клипы — в одном пространстве.</p>
   </section>
 
   <nav aria-label="Главные разделы">
@@ -456,7 +481,7 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
 (()=>{const intro=document.getElementById("cinemaIntro");if(!intro)return;
  const close=()=>{intro.classList.add("is-gone");window.setTimeout(()=>intro.remove(),1300);};
  document.getElementById("skipIntro")?.addEventListener("click",close);
- window.setTimeout(close,8500);
+ window.setTimeout(close,13500);
 })();
 
 </script>
