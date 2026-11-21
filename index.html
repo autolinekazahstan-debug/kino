@@ -338,10 +338,29 @@ header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
     <p>Отдельная коллекция музыкальных клипов и видеороликов с удобным просмотром.</p>
     <span class="soon">Раздел подготовлен · подключение впереди</span>
   </section>
-  <section id="aiPage" class="panel placeholder page">
-    <div class="bigico">✨</div><h3>ВЫБОР ИИ</h3>
-    <p>Будущий умный помощник «Моей медиатеки»: поможет выбрать, что посмотреть или послушать, по жанру и настроению.</p>
-    <span class="soon">Идея следующего этапа</span>
+  <section id="aiPage" class="page">
+    <div class="ai-card">
+      <div class="bigico">✨</div>
+      <h3>ИИ-ПОМОЩНИК «МОЯ МЕДИАТЕКА»</h3>
+      <p>Опиши настроение или напиши, какой фильм ищешь. Помощник подберёт варианты из твоего каталога.</p>
+      <div class="status" style="margin-top:12px">Режим: <b>первый этап · подбор по каталогу</b></div>
+    </div>
+    <section class="panel" style="margin-top:12px">
+      <h3>Что посмотрим?</h3>
+      <div class="iptv-categories" id="aiQuickPrompts">
+        <button class="iptv-category" type="button" data-prompt="Хочу фантастику и приключения">🚀 Фантастика</button>
+        <button class="iptv-category" type="button" data-prompt="Хочу что-нибудь смешное">😄 Комедия</button>
+        <button class="iptv-category" type="button" data-prompt="Хочу мультфильм для всей семьи">🧸 Для семьи</button>
+        <button class="iptv-category" type="button" data-prompt="Покажи новинки">🔥 Новинки</button>
+        <button class="iptv-category" type="button" data-prompt="Хочу боевик">💥 Боевик</button>
+      </div>
+      <label for="aiPrompt" class="hint">Напиши запрос своими словами</label>
+      <textarea id="aiPrompt" rows="3" placeholder="Например: посоветуй интересный фильм на вечер..." style="width:100%;box-sizing:border-box;margin-top:7px;padding:12px;border-radius:12px;background:#171225;color:#fff;border:1px solid #ffffff30"></textarea>
+      <div class="actions"><button class="action" id="aiAsk" type="button">Подобрать фильмы</button><button class="action secondary" id="aiClear" type="button">Очистить</button></div>
+      <p class="hint" id="aiReply" aria-live="polite">Я могу искать по названиям и категориям в каталоге фильмов.</p>
+      <div class="list" id="aiResults"></div>
+    </section>
+    <p class="hint" style="margin:12px 4px">Важно: сейчас это работающий прототип подбора по локальному каталогу, а не подключённая облачная нейросеть. Для настоящего диалога с ИИ и рекомендаций по фильмам, IPTV, музыке и клипам следующим этапом подключим защищённый серверный ИИ-сервис — без хранения секретного ключа в приложении.</p>
   </section>
   <section id="healthPage" class="page">
     <div class="section-head"><h3>Состояние медиатеки</h3><span class="tag">АВТОПРОВЕРКА</span></div>
@@ -562,6 +581,62 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
  render();
 })();
 
+
+/* Первый этап помощника: подбор по локальному каталогу фильмов */
+(()=>{
+ const input=document.getElementById("aiPrompt"),ask=document.getElementById("aiAsk");
+ const clear=document.getElementById("aiClear"),reply=document.getElementById("aiReply");
+ const results=document.getElementById("aiResults"),quick=document.getElementById("aiQuickPrompts");
+ if(!input||!ask||!results||typeof films==="undefined")return;
+ const terms={
+  "фантастика":["фантаст","космос","приключ","аватар","хищник","инопланет","планет"],
+  "комедия":["комед","смеш","юмор"],
+  "семья":["мульт","семь","дет","анимац","муфаса","король лев"],
+  "новинки":["новин","новое","свежее","2025","2026"],
+  "боевик":["боев","экшен","драки","стрел","миссия","уик","хищник"]
+ };
+ function recommend(raw){
+  const q=raw.toLocaleLowerCase("ru").trim();
+  if(!q){reply.textContent="Напиши настроение, жанр или название фильма — я поищу в каталоге.";results.innerHTML="";return;}
+  const matched=Object.entries(terms).filter(([key,words])=>words.some(w=>q.includes(w))).flatMap(([key])=>terms[key]);
+  const words=q.split(/[^а-яёa-z0-9]+/i).filter(w=>w.length>2&&!["хочу","что","нибудь","посоветуй","покажи","фильм","фильмы","посмотреть","вечер","мне"].includes(w));
+  const scored=films.map((film,index)=>{
+   const hay=(film.title+" "+film.group).toLocaleLowerCase("ru");
+   let score=0;
+   words.forEach(w=>{if(hay.includes(w))score+=5;});
+   matched.forEach(w=>{if(hay.includes(w))score+=2;});
+   if(q.includes("новин")&&/новин/i.test(film.group||""))score+=4;
+   if(q.includes("мульт")&&/мульт|анимац/i.test(hay))score+=5;
+   return {film,index,score};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,8);
+  results.innerHTML="";
+  if(!scored.length){
+   reply.textContent="Точного совпадения в текущем каталоге не нашёл. Попробуй другой жанр или название. Позже подключим полноценный ИИ, который сможет понимать более сложные запросы.";
+   return;
+  }
+  reply.textContent="Нашёл варианты в твоём каталоге: "+scored.length+". Выбери фильм, чтобы открыть его в разделе «Фильмы».";
+  scored.forEach(({film,index},n)=>{
+   const b=document.createElement("button");b.type="button";b.className="film";
+   const num=document.createElement("span");num.className="num";num.textContent=String(n+1).padStart(2,"0");
+   const wrap=document.createElement("span"),title=document.createElement("strong"),meta=document.createElement("small");
+   title.textContent=film.title;meta.textContent=film.group||"Без категории";
+   wrap.append(title,meta);b.append(num,wrap);
+   b.addEventListener("click",()=>{
+    const page="#filmsPage";if(location.hash!==page)history.pushState(null,"",page);
+    showPage(page);document.getElementById("filmSearch").value="";
+    activeFilmGroup="Все фильмы";renderFilms();choose(index,false);
+   });
+   results.appendChild(b);
+  });
+ }
+ ask.addEventListener("click",()=>recommend(input.value));
+ input.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter")recommend(input.value);});
+ quick?.addEventListener("click",e=>{
+  const button=e.target.closest("[data-prompt]");if(!button)return;
+  input.value=button.dataset.prompt;recommend(input.value);
+ });
+ clear?.addEventListener("click",()=>{input.value="";results.innerHTML="";reply.textContent="Напиши настроение, жанр или название фильма — я поищу в каталоге.";});
+})(); 
 
 /* Отчёт и отдельная папка фильмов, требующих вмешательства человека */
 (()=> {
