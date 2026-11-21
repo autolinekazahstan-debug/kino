@@ -350,8 +350,17 @@ header h1{color:#e3fbff;text-shadow:0 0 22px #48dce977}
       <div class="actions"><button class="action" id="reloadLinkReport">↻ Обновить отчёт</button><a class="action secondary" href="https://github.com/autolinekazahstan-debug/kino/actions/workflows/check-links.yml" target="_blank" rel="noopener">История проверок</a></div>
       <div class="status" id="linkReportStatus">Статус: <b>загружаю последний отчёт…</b></div>
       <div class="iptv-categories" id="linkReportSummary"></div>
-      <input id="linkReportSearch" type="search" placeholder="Найти фильм или ссылку" style="width:100%;padding:12px;border:1px solid #ffffff30;border-radius:10px;margin:8px 0">
-      <div class="list" id="linkReportRows" style="max-height:55vh"></div>
+      <section class="panel" style="margin:14px 0;border:1px solid #d99b3b66">
+        <div class="section-head"><h3>📁 Требует вмешательства человека</h3><span class="tag" id="humanReviewCount">0 фильмов</span></div>
+        <p class="hint">Сюда автоматически попадают только фильмы, для которых сервер подтвердил ошибку 404 или 410. Они не удаляются из исходного каталога: это отдельная папка для проверки адресов и ручного исправления.</p>
+        <div class="actions"><a class="action" href="./needs-human-intervention/films.m3u8" download="films-needs-human-intervention.m3u8">↓ Скачать отдельный плейлист</a><a class="action secondary" href="./needs-human-intervention/README.md" target="_blank" rel="noopener">Как исправить</a></div>
+        <input id="humanReviewSearch" type="search" placeholder="Найти фильм в папке" style="width:100%;padding:12px;border:1px solid #ffffff30;border-radius:10px;margin:8px 0">
+        <div class="list" id="humanReviewRows" style="max-height:45vh"></div>
+      </section>
+      <details style="margin-top:12px"><summary class="hint">Полный отчёт по всем фильмам</summary>
+        <input id="linkReportSearch" type="search" placeholder="Найти фильм или ссылку" style="width:100%;padding:12px;border:1px solid #ffffff30;border-radius:10px;margin:8px 0">
+        <div class="list" id="linkReportRows" style="max-height:55vh"></div>
+      </details>
     </section>
   </section>
 </main>
@@ -554,16 +563,32 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
 })();
 
 
-/* Отчёт автоматической серверной проверки ссылок фильмов */
+/* Отчёт и отдельная папка фильмов, требующих вмешательства человека */
 (()=> {
  const status=document.getElementById("linkReportStatus");
  const summary=document.getElementById("linkReportSummary");
  const rows=document.getElementById("linkReportRows");
  const search=document.getElementById("linkReportSearch");
  const button=document.getElementById("reloadLinkReport");
- if(!status||!summary||!rows||!button)return;
+ const humanRows=document.getElementById("humanReviewRows");
+ const humanSearch=document.getElementById("humanReviewSearch");
+ const humanCount=document.getElementById("humanReviewCount");
+ if(!status||!summary||!rows||!button||!humanRows||!humanCount)return;
  let report=null;
  const say=t=>{status.innerHTML="Статус: <b></b>";status.querySelector("b").textContent=t;};
+ function makeRow(item,index,isHuman){
+  const b=document.createElement("div");b.className="film";
+  const number=document.createElement("span");number.className="num";number.textContent=String(index+1).padStart(2,"0");
+  const wrap=document.createElement("span"),title=document.createElement("strong"),meta=document.createElement("small");
+  title.textContent=item.title;
+  const label=item.status==="available"?"Сервер ответил":item.status==="unavailable"?"Требует вмешательства человека":"Нужна повторная проверка";
+  meta.textContent=(item.group||"Без категории")+" · "+label+(item.http_status?" · HTTP "+item.http_status:"");
+  wrap.append(title,meta);b.append(number,wrap);
+  if(isHuman){
+   const link=document.createElement("a");link.className="action secondary";link.href=item.url;link.target="_blank";link.rel="noopener";link.textContent="Открыть адрес";link.style.marginLeft="auto";b.append(link);
+  }
+  return b;
+ }
  function render(){
   if(!report)return;
   const counts=report.counts||{};
@@ -571,18 +596,18 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
   [["Доступны",counts.available||0],["Недоступны",counts.unavailable||0],["Неясно",counts.unknown||0]].forEach(([label,n])=>{
    const b=document.createElement("span");b.className="iptv-category";b.textContent=label+" · "+n;summary.appendChild(b);
   });
-  const q=search.value.trim().toLocaleLowerCase("ru");
-  const items=(report.items||[]).filter(x=>(x.title+" "+x.url+" "+x.group).toLocaleLowerCase("ru").includes(q));
+  const all=report.items||[];
+  const failed=all.filter(x=>x.status==="unavailable");
+  humanCount.textContent=failed.length+" фильмов";
+  const hq=(humanSearch?.value||"").trim().toLocaleLowerCase("ru");
+  const humanFiltered=failed.filter(x=>(x.title+" "+x.url+" "+x.group).toLocaleLowerCase("ru").includes(hq));
+  humanRows.innerHTML="";
+  humanFiltered.forEach((item,index)=>humanRows.appendChild(makeRow(item,index,true)));
+  if(!humanFiltered.length){const p=document.createElement("p");p.className="hint";p.textContent=failed.length?"В папке нет совпадений.":"Папка пока пустая — подтверждённых ошибок 404/410 нет.";humanRows.appendChild(p);}
+  const q=(search?.value||"").trim().toLocaleLowerCase("ru");
+  const items=all.filter(x=>(x.title+" "+x.url+" "+x.group).toLocaleLowerCase("ru").includes(q));
   rows.innerHTML="";
-  items.forEach((item,index)=>{
-   const b=document.createElement("div");b.className="film";
-   const number=document.createElement("span");number.className="num";number.textContent=String(index+1).padStart(2,"0");
-   const wrap=document.createElement("span"),title=document.createElement("strong"),meta=document.createElement("small");
-   title.textContent=item.title;
-   const label=item.status==="available"?"Сервер ответил":item.status==="unavailable"?"Ошибка ссылки":"Нужна повторная проверка";
-   meta.textContent=(item.group||"Без категории")+" · "+label+(item.http_status?" · HTTP "+item.http_status:"");
-   wrap.append(title,meta);b.append(number,wrap);rows.appendChild(b);
-  });
+  items.forEach((item,index)=>rows.appendChild(makeRow(item,index,false)));
   if(!items.length){const p=document.createElement("p");p.className="hint";p.textContent="Совпадений нет.";rows.appendChild(p);}
  }
  async function load(){
@@ -595,7 +620,7 @@ video.addEventListener("error",()=>setStatus("ошибка загрузки: с�
   }catch(e){say("отчёт ещё не опубликован. Запусти проверку в GitHub Actions или дождись первого запуска.");}
   finally{button.disabled=false;}
  }
- button.addEventListener("click",load);search.addEventListener("input",render);load();
+ button.addEventListener("click",load);if(search)search.addEventListener("input",render);if(humanSearch)humanSearch.addEventListener("input",render);load();
 })(); 
 
 /* Заставка показывается при каждом открытии сайта по ссылке */
